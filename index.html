@@ -256,6 +256,7 @@
             border-radius: 10px;
             box-shadow: 0 0 40px rgba(255, 110, 199, 0.5);
             margin-bottom: 20px;
+            object-fit: contain;
         }
         
         .viewer-caption {
@@ -402,6 +403,10 @@
                 top: 20px;
                 right: 20px;
             }
+            
+            .viewer-caption {
+                font-size: 1.5rem;
+            }
         }
         
         /* Birthday Countdown */
@@ -452,6 +457,21 @@
         .indicator-dot.active {
             background: #ff6ec7;
             transform: scale(1.3);
+        }
+        
+        /* Loading State */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #ff6ec7;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -534,6 +554,19 @@
                 <!-- Gift items with photo backgrounds will be added by JavaScript -->
             </div>
             
+            <!-- Image Upload Notice (for testing) -->
+            <div style="margin: 30px 0; padding: 20px; background: rgba(255, 255, 255, 0.05); border-radius: 10px; max-width: 800px;">
+                <h3 style="color: #ffd166; margin-bottom: 10px;">📸 Photo Setup Instructions</h3>
+                <p>To use your own photos:</p>
+                <ol style="text-align: left; margin: 10px 0 10px 20px;">
+                    <li>Create a folder named "public" in your project</li>
+                    <li>Add your 6 photos to that folder</li>
+                    <li>Name them: photo1.jpg, photo2.jpg, ... photo6.jpg</li>
+                    <li>Deploy to Vercel!</li>
+                </ol>
+                <p><small>Currently showing sample photos. Replace the image URLs in the JavaScript section with your actual image paths.</small></p>
+            </div>
+            
             <!-- Final Message -->
             <div class="final-message">
                 <h2>To My Shawtie, Hyacinth, Red Fiyori 🌸</h2>
@@ -560,7 +593,7 @@ Happy Birthday to the girl who changed my life just by being herself.
 
 May this year bring you closer to everything your soul has been asking God for. And may you never forget how deeply, genuinely, and respectfully loved you are today and always.</p>
                 <h2>Your fav boi, Chicooooo</h2>
-           
+            
             <button class="submit-btn" id="restartBtn" style="margin-top: 40px;">Relive the Magic <i class="fas fa-redo"></i></button>
         </section>
     </div>
@@ -639,7 +672,13 @@ May this year bring you closer to everything your soul has been asking God for. 
         setInterval(updateCountdown, 1000);
         updateCountdown(); // Initial call
         
-        // Sample images (Replace these with your actual 6 images)
+        // ===========================
+        // IMAGE SETUP FOR VERCEL
+        // ===========================
+        
+        // Option 1: Local images in public folder (Recommended for Vercel)
+        // Create a "public" folder and put your images there
+        // Name them: photo1.jpg, photo2.jpg, ... photo6.jpg
         const localImages = [
             {url: 'photo1.jpg', label: 'My Beautiful Shawtie'},
             {url: 'photo2.jpg', label: 'Radiant Hyacinth'},
@@ -648,6 +687,20 @@ May this year bring you closer to everything your soul has been asking God for. 
             {url: 'photo5.jpg', label: 'My Everything'},
             {url: 'photo6.jpg', label: 'Forever Mine'}
         ];
+        
+        // Option 2: External image URLs (if you upload to another service)
+        // Replace these with your actual image URLs
+        const externalImages = [
+            {url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', label: 'My Beautiful Shawtie'},
+            {url: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', label: 'Radiant Hyacinth'},
+            {url: 'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', label: 'My Red Fiyori'},
+            {url: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', label: 'Always Shining'},
+            {url: 'https://images.unsplash.com/photo-1554151228-14d9def656e4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', label: 'My Everything'},
+            {url: 'https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', label: 'Forever Mine'}
+        ];
+        
+        // Choose which image set to use (change to localImages for Vercel deployment)
+        const sampleImages = localImages; // Change to 'externalImages' if using external URLs
         
         // Gift items with corresponding photos
         const giftItems = [
@@ -691,6 +744,9 @@ May this year bring you closer to everything your soul has been asking God for. 
         
         // Create gift items with photo backgrounds
         function createGiftItems() {
+            // Clear loading state if any
+            giftContainer.innerHTML = '';
+            
             giftItems.forEach((gift, index) => {
                 const giftItem = document.createElement('div');
                 giftItem.className = 'gift-item';
@@ -699,7 +755,18 @@ May this year bring you closer to everything your soul has been asking God for. 
                 // Create photo background
                 const photoBg = document.createElement('div');
                 photoBg.className = 'photo-bg';
-                photoBg.style.backgroundImage = `url('${sampleImages[gift.photoIndex].url}')`;
+                
+                // Set background image with error handling
+                const img = new Image();
+                img.src = sampleImages[gift.photoIndex].url;
+                img.onload = function() {
+                    photoBg.style.backgroundImage = `url('${sampleImages[gift.photoIndex].url}')`;
+                };
+                img.onerror = function() {
+                    console.log(`Failed to load image: ${sampleImages[gift.photoIndex].url}`);
+                    // Fallback to a gradient background
+                    photoBg.style.background = 'linear-gradient(135deg, #ff6ec7, #7873f5)';
+                };
                 
                 // Create gift content
                 const giftIcon = document.createElement('i');
@@ -723,6 +790,18 @@ May this year bring you closer to everything your soul has been asking God for. 
                     showFullscreenPhoto(gift.photoIndex);
                 });
                 
+                // Add touch event for mobile
+                giftItem.addEventListener('touchstart', function(e) {
+                    e.preventDefault();
+                    this.classList.add('active');
+                });
+                
+                giftItem.addEventListener('touchend', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('active');
+                    showFullscreenPhoto(gift.photoIndex);
+                });
+                
                 // Add animation delay
                 giftItem.style.animation = `fadeIn 0.8s ease ${index * 0.2}s forwards`;
                 giftItem.style.opacity = '0';
@@ -735,10 +814,26 @@ May this year bring you closer to everything your soul has been asking God for. 
         // Show fullscreen photo
         function showFullscreenPhoto(index) {
             currentPhotoIndex = index;
-            viewerImage.src = sampleImages[index].url;
-            viewerCaption.textContent = sampleImages[index].label;
-            photoViewer.classList.add('active');
-            updatePhotoIndicator();
+            
+            // Show loading state
+            viewerImage.src = '';
+            viewerImage.style.opacity = '0';
+            
+            const img = new Image();
+            img.src = sampleImages[index].url;
+            img.onload = function() {
+                viewerImage.src = sampleImages[index].url;
+                viewerImage.style.opacity = '1';
+                viewerCaption.textContent = sampleImages[index].label;
+                photoViewer.classList.add('active');
+                updatePhotoIndicator();
+            };
+            img.onerror = function() {
+                viewerImage.src = '';
+                viewerCaption.textContent = `Could not load image: ${sampleImages[index].label}`;
+                photoViewer.classList.add('active');
+                updatePhotoIndicator();
+            };
         }
         
         // Update photo indicator dots
@@ -762,23 +857,30 @@ May this year bring you closer to everything your soul has been asking God for. 
         // Previous photo
         prevBtn.addEventListener('click', function() {
             currentPhotoIndex = (currentPhotoIndex - 1 + sampleImages.length) % sampleImages.length;
-            viewerImage.src = sampleImages[currentPhotoIndex].url;
-            viewerCaption.textContent = sampleImages[currentPhotoIndex].label;
-            updatePhotoIndicator();
+            showFullscreenPhoto(currentPhotoIndex);
         });
         
         // Next photo
         nextBtn.addEventListener('click', function() {
             currentPhotoIndex = (currentPhotoIndex + 1) % sampleImages.length;
-            viewerImage.src = sampleImages[currentPhotoIndex].url;
-            viewerCaption.textContent = sampleImages[currentPhotoIndex].label;
-            updatePhotoIndicator();
+            showFullscreenPhoto(currentPhotoIndex);
         });
         
         // Close viewer on escape key
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape' && photoViewer.classList.contains('active')) {
                 photoViewer.classList.remove('active');
+            }
+            
+            // Arrow key navigation
+            if (photoViewer.classList.contains('active')) {
+                if (e.key === 'ArrowLeft') {
+                    currentPhotoIndex = (currentPhotoIndex - 1 + sampleImages.length) % sampleImages.length;
+                    showFullscreenPhoto(currentPhotoIndex);
+                } else if (e.key === 'ArrowRight') {
+                    currentPhotoIndex = (currentPhotoIndex + 1) % sampleImages.length;
+                    showFullscreenPhoto(currentPhotoIndex);
+                }
             }
         });
         
