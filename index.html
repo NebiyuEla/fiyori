@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Shawtie - Happy 18th Birthday!</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a0a2e 0%, #2d0b47 50%, #4a0b6e 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Landing Page Styles */
+        .landing-page {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 90vh;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .landing-page h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #ff6ec7, #7873f5);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 20px rgba(255, 110, 199, 0.3);
+            animation: pulse 2s infinite;
+        }
+        
+        .landing-page p {
+            font-size: 1.5rem;
+            margin-bottom: 40px;
+            max-width: 700px;
+            line-height: 1.6;
+        }
+        
+        .nickname-container {
+            margin: 40px 0;
+        }
+        
+        .input-container {
+            position: relative;
+            margin: 20px 0;
+        }
+        
+        input {
+            padding: 15px 25px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            border: 2px solid #ff6ec7;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            width: 300px;
+            text-align: center;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus {
+            box-shadow: 0 0 20px rgba(255, 110, 199, 0.7);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .submit-btn {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            border: none;
+            background: linear-gradient(to right, #ff6ec7, #7873f5);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255, 110, 199, 0.4);
+        }
+        
+        .heart {
+            position: absolute;
+            font-size: 1.5rem;
+            color: #ff6ec7;
+            animation: float 3s infinite ease-in-out;
+        }
+        
+        /* Hidden Sections */
+        .hidden {
+            display: none;
+        }
+        
+        /* Incorrect Answer Styles */
+        .incorrect {
+            animation: shake 0.5s;
+            border-color: #ff3333;
+        }
+        
+        /* Gift Reveal Section */
+        .gift-reveal {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+        }
+        
+        .gift-title {
+            font-size: 3.5rem;
+            margin-bottom: 30px;
+            background: linear-gradient(to right, #ffd166, #ff6ec7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .gift-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+            width: 100%;
+        }
+        
+        .gift-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.5s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .gift-item:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 15px 30px rgba(255, 110, 199, 0.3);
+        }
+        
+        .gift-item i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #ff6ec7;
+            transition: all 0.5s ease;
+            z-index: 2;
+            position: relative;
+        }
+        
+        .gift-item h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #ffd166;
+            z-index: 2;
+            position: relative;
+        }
+        
+        .gift-item p {
+            z-index: 2;
+            position: relative;
+        }
+        
+        /* Photo Background for Gift Items */
+        .photo-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+            border-radius: 20px;
+            z-index: 1;
+        }
+        
+        .gift-item:hover .photo-bg {
+            opacity: 0.2;
+        }
+        
+        .gift-item.active .photo-bg {
+            opacity: 0.7;
+        }
+        
+        .gift-item.active {
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(255, 110, 199, 0.5);
+            border-color: #ff6ec7;
+        }
+        
+        .gift-item.active i,
+        .gift-item.active h3,
+        .gift-item.active p {
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+        }
+        
+        /* Fullscreen Photo Viewer */
+        .photo-viewer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s ease;
+        }
+        
+        .photo-viewer.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .viewer-image {
+            max-width: 90%;
+            max-height: 70%;
+            border-radius: 10px;
+            box-shadow: 0 0 40px rgba(255, 110, 199, 0.5);
+            margin-bottom: 20px;
+        }
+        
+        .viewer-caption {
+            font-size: 2rem;
+            color: #ffd166;
+            text-align: center;
+            max-width: 80%;
+            margin-bottom: 30px;
+        }
+        
+        .close-viewer {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            font-size: 2.5rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .close-viewer:hover {
+            color: #ff6ec7;
+            transform: scale(1.2);
+        }
+        
+        .prev-btn, .next-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 3rem;
+            color: white;
+            cursor: pointer;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .prev-btn:hover, .next-btn:hover {
+            color: #ff6ec7;
+        }
+        
+        .prev-btn {
+            left: 30px;
+        }
+        
+        .next-btn {
+            right: 30px;
+        }
+        
+        /* Final Message */
+        .final-message {
+            margin: 60px 0;
+            padding: 40px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .final-message h2 {
+            font-size: 2.8rem;
+            margin-bottom: 30px;
+            color: #ff6ec7;
+        }
+        
+        .final-message p {
+            font-size: 1.4rem;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto 20px;
+        }
+        
+        .signature {
+            font-size: 2rem;
+            margin-top: 40px;
+            color: #ffd166;
+            font-style: italic;
+        }
+        
+        /* Hearts Background */
+        .hearts-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .hearts-bg i {
+            position: absolute;
+            color: rgba(255, 110, 199, 0.2);
+            font-size: 1.5rem;
+            animation: float 8s infinite linear;
+        }
+        
+        /* Animations */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .landing-page h1 {
+                font-size: 2.8rem;
+            }
+            
+            .gift-title {
+                font-size: 2.5rem;
+            }
+            
+            .gift-container {
+                grid-template-columns: 1fr;
+            }
+            
+            input {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .prev-btn, .next-btn {
+                font-size: 2rem;
+                padding: 10px;
+            }
+            
+            .close-viewer {
+                top: 20px;
+                right: 20px;
+            }
+        }
+        
+        /* Birthday Countdown */
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .countdown-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            min-width: 80px;
+            text-align: center;
+        }
+        
+        .countdown-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ff6ec7;
+        }
+        
+        .countdown-label {
+            font-size: 0.9rem;
+            color: #ffd166;
+            margin-top: 5px;
+        }
+        
+        /* Photo Indicator */
+        .photo-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .indicator-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .indicator-dot.active {
+            background: #ff6ec7;
+            transform: scale(1.3);
+        }
+    </style>
+</head>
+<body>
+    <!-- Hearts Background -->
+    <div class="hearts-bg" id="heartsBg"></div>
+    
+    <!-- Photo Viewer -->
+    <div class="photo-viewer" id="photoViewer">
+        <div class="close-viewer" id="closeViewer">
+            <i class="fas fa-times"></i>
+        </div>
+        <div class="prev-btn" id="prevBtn">
+            <i class="fas fa-chevron-left"></i>
+        </div>
+        <div class="next-btn" id="nextBtn">
+            <i class="fas fa-chevron-right"></i>
+        </div>
+        <img class="viewer-image" id="viewerImage" src="" alt="Photo">
+        <div class="viewer-caption" id="viewerCaption"></div>
+        <div class="photo-indicator" id="photoIndicator"></div>
+    </div>
+    
+    <!-- Landing Page -->
+    <div class="container">
+        <section class="landing-page" id="landingPage">
+            <h1>Hey BB Gal! 🎀</h1>
+            <p>Welcome to your special 18th birthday surprise!<br>I've created something just for you, my beautiful Hyacinth 🌸</p>
+            
+            <div class="nickname-container">
+                <p style="font-size: 1.8rem; margin-bottom: 10px;">First, what do I call you?</p>
+                <div class="input-container">
+                    <input type="text" id="nicknameInput" placeholder="Enter your nickname here...">
+                </div>
+                <button class="submit-btn" id="nicknameSubmit">That's Me! <i class="fas fa-heart"></i></button>
+            </div>
+            
+            <div class="countdown" id="countdown">
+                <div class="countdown-item">
+                    <div class="countdown-value" id="days">0</div>
+                    <div class="countdown-label">Days</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-value" id="hours">0</div>
+                    <div class="countdown-label">Hours</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-value" id="minutes">0</div>
+                    <div class="countdown-label">Minutes</div>
+                </div>
+                <div class="countdown-item">
+                    <div class="countdown-value" id="seconds">0</div>
+                    <div class="countdown-label">Seconds</div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Age Verification Section -->
+        <section class="landing-page hidden" id="ageSection">
+            <h1>My Dearest <span id="displayNickname">Shawtie</span> ❤️</h1>
+            <p>Now for the important question...<br>How many trips around the sun will you be celebrating today? 🎂</p>
+            
+            <div class="nickname-container">
+                <p style="font-size: 1.8rem; margin-bottom: 10px;">How old will you be?</p>
+                <div class="input-container">
+                    <input type="number" id="ageInput" placeholder="Enter your age...">
+                </div>
+                <button class="submit-btn" id="ageSubmit">Let's Celebrate! <i class="fas fa-birthday-cake"></i></button>
+            </div>
+            
+            <p id="ageHint" style="margin-top: 20px; font-size: 1.2rem; color: #ffd166; opacity: 0.8;">Hint: It's a very special number! ✨</p>
+        </section>
+        
+        <!-- Gift Reveal Section -->
+        <section class="gift-reveal hidden" id="giftSection">
+            <h1 class="gift-title">Happy 18th Birthday, <span id="birthdayName">Shawtie</span>! 🎉</h1>
+            <p style="font-size: 1.5rem; margin-bottom: 20px; max-width: 800px;">Welcome to adulthood! Here are 6 special gifts for my amazing Red Fiyori 🌹<br><small>Click or hover on each gift to see a special photo background</small></p>
+            
+            <div class="gift-container" id="giftContainer">
+                <!-- Gift items with photo backgrounds will be added by JavaScript -->
+            </div>
+            
+            <!-- Final Message -->
+            <div class="final-message">
+                <h2>To My Shawtie, Hyacinth, Red Fiyori 🌸</h2>
+                <p>Happy Birthday my shawtie… my Red Fiyorie 🌺… my Hyacinth 🤍
+Today the world is lowkey lucky, because the day you were born is not just a birthday it’s a reminder that God still creates beauty with intention. And I don’t say that lightly. I mean it in the most serious, heart deep, soul rooted way possible.
+
+I don’t even know where to start because every time I think about you, my heart gets loud. You’re my best friend, but also the person my soul accidentally chose. The one I talk to when I’m happy, when I’m broken, when I’m tired of pretending I’m strong. The one who feels like home without trying. The one I treat like a wife, even if the world only calls you “friend” because love doesn’t always need titles to be real.
+
+You’re softness and strength at the same time. You’re laughter that heals. You’re patience I don’t deserve but somehow receive anyway. You’re the calm after my storms and sometimes the fire that wakes me up when I’m fading. You don’t just exist you change the atmosphere wherever you go.
+
+Shawtie… you have no idea how many times God used you to save me in ways you’ll never fully know. Through your words. Through your presence. Through your silence. Through your prayers. I truly believe you were placed in my life on purpose. Not by coincidence. Not by chance. But by God’s careful hand.
+
+I know that nothing meaningful happens without divine order. I pray that Saint Mikael guards you wherever you walk, that St. Mary covers you with her mercy, and that God strengthens you in moments when the world feels heavy. May your life be filled with peace, with light, with grace, and with blessings that arrive quietly but stay forever.
+
+You are my Red Fiyorie rare, gentle, and powerful in beauty. You are my Hyacinth symbol of rebirth, hope, and deep love. You bloom even after cold seasons, and I admire that more than you know. Even when life tries to dim you, you still glow in ways that feel holy.
+
+On your birthday, I wish you a future that feels safe. A love that doesn’t confuse you. Success that doesn’t cost you your peace. Joy that doesn’t depend on anyone’s approval. I wish you mornings where your heart feels light and nights where your prayers feel answered. I wish you a life where you never doubt your worth because you are more than enough, always.
+
+And if the world ever becomes too loud, too cruel, or too unfair… just know there’s someone here who will always see you, always choose you, always pray for you even silently. Someone who is proud of you in ways words can’t fully explain.
+
+Happy Birthday, my shawtie 🤍
+Happy Birthday, my heart’s safe place.
+Happy Birthday to the girl who changed my life just by being herself.
+
+May this year bring you closer to everything your soul has been asking God for. And may you never forget how deeply, genuinely, and respectfully loved you are today and always.</p>
+                <h2>Your fav boi, Chicooooo</h2>
+           
+            <button class="submit-btn" id="restartBtn" style="margin-top: 40px;">Relive the Magic <i class="fas fa-redo"></i></button>
+        </section>
+    </div>
+
+    <script>
+        // Create floating hearts in background
+        const heartsBg = document.getElementById('heartsBg');
+        for (let i = 0; i < 50; i++) {
+            const heart = document.createElement('i');
+            heart.className = 'fas fa-heart';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.top = Math.random() * 100 + 'vh';
+            heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+            heart.style.animationDelay = Math.random() * 5 + 's';
+            heart.style.opacity = Math.random() * 0.5 + 0.1;
+            heartsBg.appendChild(heart);
+        }
+        
+        // DOM Elements
+        const landingPage = document.getElementById('landingPage');
+        const ageSection = document.getElementById('ageSection');
+        const giftSection = document.getElementById('giftSection');
+        const nicknameInput = document.getElementById('nicknameInput');
+        const nicknameSubmit = document.getElementById('nicknameSubmit');
+        const ageInput = document.getElementById('ageInput');
+        const ageSubmit = document.getElementById('ageSubmit');
+        const displayNickname = document.getElementById('displayNickname');
+        const birthdayName = document.getElementById('birthdayName');
+        const giftContainer = document.getElementById('giftContainer');
+        const restartBtn = document.getElementById('restartBtn');
+        const ageHint = document.getElementById('ageHint');
+        
+        // Photo Viewer Elements
+        const photoViewer = document.getElementById('photoViewer');
+        const closeViewer = document.getElementById('closeViewer');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const viewerImage = document.getElementById('viewerImage');
+        const viewerCaption = document.getElementById('viewerCaption');
+        const photoIndicator = document.getElementById('photoIndicator');
+        
+        // Countdown elements
+        const daysEl = document.getElementById('days');
+        const hoursEl = document.getElementById('hours');
+        const minutesEl = document.getElementById('minutes');
+        const secondsEl = document.getElementById('seconds');
+        
+        // Birthday countdown - set to today for immediate celebration
+        const birthday = new Date();
+        birthday.setHours(23, 59, 59, 999); // Set to end of today
+        
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const timeLeft = birthday - now;
+            
+            if (timeLeft > 0) {
+                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                
+                daysEl.textContent = days;
+                hoursEl.textContent = hours;
+                minutesEl.textContent = minutes;
+                secondsEl.textContent = seconds;
+            } else {
+                // Birthday has arrived!
+                daysEl.textContent = '0';
+                hoursEl.textContent = '0';
+                minutesEl.textContent = '0';
+                secondsEl.textContent = '0';
+            }
+        }
+        
+        // Update countdown every second
+        setInterval(updateCountdown, 1000);
+        updateCountdown(); // Initial call
+        
+        // Sample images (Replace these with your actual 6 images)
+        const localImages = [
+            {url: 'photo1.jpg', label: 'My Beautiful Shawtie'},
+            {url: 'photo2.jpg', label: 'Radiant Hyacinth'},
+            {url: 'photo3.jpg', label: 'My Red Fiyori'},
+            {url: 'photo4.jpg', label: 'Always Shining'},
+            {url: 'photo5.jpg', label: 'My Everything'},
+            {url: 'photo6.jpg', label: 'Forever Mine'}
+        ];
+        
+        // Gift items with corresponding photos
+        const giftItems = [
+            {
+                icon: 'fas fa-heart',
+                title: 'Endless Love',
+                description: 'A lifetime supply of my unconditional love and affection, always and forever.',
+                photoIndex: 0
+            },
+            {
+                icon: 'fas fa-star',
+                title: 'Starlight Wishes',
+                description: 'Every star in the sky to wish upon, with me by your side to make them come true.',
+                photoIndex: 1
+            },
+            {
+                icon: 'fas fa-music',
+                title: 'Personal Symphony',
+                description: 'A song in my heart that plays only for you, my beautiful Hyacinth.',
+                photoIndex: 2
+            },
+            {
+                icon: 'fas fa-gem',
+                title: 'Precious Memories',
+                description: 'All our memories together, treasured like the most precious jewels.',
+                photoIndex: 3
+            },
+            {
+                icon: 'fas fa-laugh-beam',
+                title: 'Infinite Laughter',
+                description: 'Countless moments of joy and laughter to fill your life with happiness.',
+                photoIndex: 4
+            },
+            {
+                icon: 'fas fa-hands-helping',
+                title: 'Unwavering Support',
+                description: 'My constant support in all your dreams and adventures that lie ahead.',
+                photoIndex: 5
+            }
+        ];
+        
+        // Create gift items with photo backgrounds
+        function createGiftItems() {
+            giftItems.forEach((gift, index) => {
+                const giftItem = document.createElement('div');
+                giftItem.className = 'gift-item';
+                giftItem.dataset.photoIndex = gift.photoIndex;
+                
+                // Create photo background
+                const photoBg = document.createElement('div');
+                photoBg.className = 'photo-bg';
+                photoBg.style.backgroundImage = `url('${sampleImages[gift.photoIndex].url}')`;
+                
+                // Create gift content
+                const giftIcon = document.createElement('i');
+                giftIcon.className = gift.icon;
+                
+                const giftTitle = document.createElement('h3');
+                giftTitle.textContent = gift.title;
+                
+                const giftDescription = document.createElement('p');
+                giftDescription.textContent = gift.description;
+                
+                giftItem.appendChild(photoBg);
+                giftItem.appendChild(giftIcon);
+                giftItem.appendChild(giftTitle);
+                giftItem.appendChild(giftDescription);
+                
+                giftContainer.appendChild(giftItem);
+                
+                // Add click event to show fullscreen photo
+                giftItem.addEventListener('click', function() {
+                    showFullscreenPhoto(gift.photoIndex);
+                });
+                
+                // Add animation delay
+                giftItem.style.animation = `fadeIn 0.8s ease ${index * 0.2}s forwards`;
+                giftItem.style.opacity = '0';
+            });
+        }
+        
+        // Current photo index for viewer
+        let currentPhotoIndex = 0;
+        
+        // Show fullscreen photo
+        function showFullscreenPhoto(index) {
+            currentPhotoIndex = index;
+            viewerImage.src = sampleImages[index].url;
+            viewerCaption.textContent = sampleImages[index].label;
+            photoViewer.classList.add('active');
+            updatePhotoIndicator();
+        }
+        
+        // Update photo indicator dots
+        function updatePhotoIndicator() {
+            photoIndicator.innerHTML = '';
+            sampleImages.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.className = `indicator-dot ${index === currentPhotoIndex ? 'active' : ''}`;
+                dot.addEventListener('click', () => {
+                    showFullscreenPhoto(index);
+                });
+                photoIndicator.appendChild(dot);
+            });
+        }
+        
+        // Close fullscreen photo viewer
+        closeViewer.addEventListener('click', function() {
+            photoViewer.classList.remove('active');
+        });
+        
+        // Previous photo
+        prevBtn.addEventListener('click', function() {
+            currentPhotoIndex = (currentPhotoIndex - 1 + sampleImages.length) % sampleImages.length;
+            viewerImage.src = sampleImages[currentPhotoIndex].url;
+            viewerCaption.textContent = sampleImages[currentPhotoIndex].label;
+            updatePhotoIndicator();
+        });
+        
+        // Next photo
+        nextBtn.addEventListener('click', function() {
+            currentPhotoIndex = (currentPhotoIndex + 1) % sampleImages.length;
+            viewerImage.src = sampleImages[currentPhotoIndex].url;
+            viewerCaption.textContent = sampleImages[currentPhotoIndex].label;
+            updatePhotoIndicator();
+        });
+        
+        // Close viewer on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && photoViewer.classList.contains('active')) {
+                photoViewer.classList.remove('active');
+            }
+        });
+        
+        // Valid nicknames (case insensitive)
+        const validNicknames = ['shawtie', 'hyacinth', 'red fiyori', 'redfiyori'];
+        
+        // Nickname validation
+        nicknameSubmit.addEventListener('click', function() {
+            const nickname = nicknameInput.value.trim().toLowerCase();
+            
+            if (validNicknames.includes(nickname)) {
+                // Success - move to age section
+                landingPage.classList.add('hidden');
+                ageSection.classList.remove('hidden');
+                displayNickname.textContent = nickname.charAt(0).toUpperCase() + nickname.slice(1);
+                
+                // Add celebration effect
+                createHearts(20);
+            } else {
+                // Incorrect nickname
+                nicknameInput.classList.add('incorrect');
+                setTimeout(() => nicknameInput.classList.remove('incorrect'), 500);
+                
+                // Fun error message
+                const messages = [
+                    "Hmm, that doesn't sound right... Try again my love!",
+                    "That's not what I call you! Think sweet thoughts...",
+                    "Not quite! Remember our special names?",
+                    "Close but not exactly! Try 'shawtie', 'hyacinth', or 'red fiyori'"
+                ];
+                
+                const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+                alert(randomMessage);
+            }
+        });
+        
+        // Allow Enter key for nickname input
+        nicknameInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                nicknameSubmit.click();
+            }
+        });
+        
+        // Age validation
+        ageSubmit.addEventListener('click', function() {
+            const age = parseInt(ageInput.value);
+            
+            if (age === 18) {
+                // Success - show gift section
+                ageSection.classList.add('hidden');
+                giftSection.classList.remove('hidden');
+                birthdayName.textContent = displayNickname.textContent;
+                
+                // Create gift items with photos
+                createGiftItems();
+                
+                // Add massive celebration effect
+                createHearts(100);
+                confettiEffect();
+                
+            } else if (age < 18) {
+                // Too young
+                ageInput.classList.add('incorrect');
+                setTimeout(() => ageInput.classList.remove('incorrect'), 500);
+                alert(`Oops! You're turning 18 today, not ${age}! This is your special coming-of-age birthday! 🎂`);
+            } else if (age > 18 && age < 25) {
+                // Older but close
+                ageInput.classList.add('incorrect');
+                setTimeout(() => ageInput.classList.remove('incorrect'), 500);
+                alert(`You wish! 😜 You're forever 18 in my heart, but today you're actually turning 18!`);
+            } else {
+                // Way off
+                ageInput.classList.add('incorrect');
+                setTimeout(() => ageInput.classList.remove('incorrect'), 500);
+                alert(`Haha, nice try! But today is your 18th birthday! The big one! 🎉`);
+            }
+        });
+        
+        // Allow Enter key for age input
+        ageInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                ageSubmit.click();
+            }
+        });
+        
+        // Restart button
+        restartBtn.addEventListener('click', function() {
+            giftSection.classList.add('hidden');
+            landingPage.classList.remove('hidden');
+            nicknameInput.value = '';
+            ageInput.value = '';
+            giftContainer.innerHTML = '';
+            
+            // Scroll to top
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        });
+        
+        // Create floating hearts animation
+        function createHearts(count) {
+            for (let i = 0; i < count; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    heart.innerHTML = '❤️';
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.fontSize = (Math.random() * 30 + 20) + 'px';
+                    heart.style.animation = `float ${Math.random() * 3 + 2}s ease-in forwards`;
+                    
+                    document.body.appendChild(heart);
+                    
+                    // Remove heart after animation
+                    setTimeout(() => {
+                        heart.remove();
+                    }, 3000);
+                }, i * 100);
+            }
+        }
+        
+        // Confetti effect
+        function confettiEffect() {
+            const colors = ['#ff6ec7', '#7873f5', '#ffd166', '#ff9a76', '#a3de83'];
+            
+            for (let i = 0; i < 150; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.position = 'fixed';
+                    confetti.style.width = '10px';
+                    confetti.style.height = '10px';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.borderRadius = '50%';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.top = '-10px';
+                    confetti.style.zIndex = '9999';
+                    
+                    document.body.appendChild(confetti);
+                    
+                    // Animate confetti
+                    const animation = confetti.animate([
+                        { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+                        { transform: `translateY(${window.innerHeight + 10}px) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+                    ], {
+                        duration: Math.random() * 3000 + 2000,
+                        easing: 'cubic-bezier(0.215, 0.61, 0.355, 1)'
+                    });
+                    
+                    // Remove confetti after animation
+                    animation.onfinish = () => confetti.remove();
+                }, i * 20);
+            }
+        }
+        
+        // Add some fun to the age hint
+        let hintIndex = 0;
+        const hintMessages = [
+            "Hint: It's a very special number! ✨",
+            "Hint: It rhymes with 'great'! 🎂",
+            "Hint: You're officially an adult! 🥳",
+            "Hint: Double of 9! 🔢",
+            "Hint: The age of freedom! 🗽"
+        ];
+        
+        setInterval(() => {
+            ageHint.textContent = hintMessages[hintIndex];
+            hintIndex = (hintIndex + 1) % hintMessages.length;
+        }, 3000);
+        
+        // Initial animation
+        window.addEventListener('load', function() {
+            landingPage.style.animation = 'fadeIn 1.5s ease forwards';
+        });
+    </script>
+</body>
+</html>
